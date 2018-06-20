@@ -5,6 +5,7 @@ package co.com.s4n.semillero.ejercicio.otherTest;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -15,24 +16,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Calculator {
 
-    public int add(int a, int b) {
-        return MathUtil.addInteger(a, b);
-    }
-}
-
-abstract class MathUtil {
-
-    public static final int addInteger(int a, int b) {
-        return a + b;
-    }
-
-    private MathUtil() {}
-}
-
+@ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
-@PrepareForTest(MathUtil.class)
 public class testMockito {
 
     private Calculator calculator;
