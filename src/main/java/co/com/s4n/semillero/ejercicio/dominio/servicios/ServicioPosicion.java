@@ -14,47 +14,44 @@ public class ServicioPosicion {
     }
 
     public static Try<Dron> disminuirPosicionX(Dron dron) {
-        Try<Integer> posicionX = fueraDeRango(dron.getPosicion().getX());
-        if (posicionX.isFailure()) {
-            return Try.failure(new Exception());
-        }
-        Integer posicionX1 = posicionX.getOrElse(0);
-        Posicion posicion = new Posicion(--posicionX1, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
-        return Try.of(() -> new Dron(posicion, dron.getPedidos()));
+        Try<Dron> drons = fueraDeRango(dron.getPosicion().getX())
+                .flatMap(posicionX -> Try.of(() -> {
+                    Integer posicion = posicionX;
+                    return new Posicion(--posicion, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
+                }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
+        return drons;
     }
 
     public static Try<Dron> disminuirPosicionY(Dron dron) {
-        Try<Integer> posicionY = fueraDeRango(dron.getPosicion().getY());
-        if (posicionY.isFailure()) {
-            return Try.failure(new Exception());
-        }
-        Integer posicionY1 = posicionY.getOrElse(0);
-        Posicion posicion = new Posicion(dron.getPosicion().getX(), --posicionY1, dron.getPosicion().getOrientacion());
-        return Try.of(() -> new Dron(posicion, dron.getPedidos()));
+        Try<Dron> drons = fueraDeRango(dron.getPosicion().getY())
+                .flatMap(posicionY -> Try.of(() -> {
+                    Integer posicion = posicionY;
+                    return new Posicion(dron.getPosicion().getX(), --posicion, dron.getPosicion().getOrientacion());
+                }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
+        return drons;
     }
 
     public static Try<Dron> aumentarPosicionX(Dron dron) {
-        Try<Integer> posicionX = fueraDeRango(dron.getPosicion().getX());
-        if (posicionX.isFailure()) {
-            return Try.failure(new Exception());
-        }
-        Integer posicionX1 = posicionX.getOrElse(0);
-        Posicion posicion = new Posicion(++posicionX1, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
-        return Try.of(() -> new Dron(posicion, dron.getPedidos()));
+        Try<Dron> drons = fueraDeRango(dron.getPosicion().getX())
+                .flatMap(posicionX -> Try.of(() -> {
+                    Integer posicion = posicionX;
+                    return new Posicion(++posicion, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
+                }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
+        return drons;
     }
 
     public static Try<Dron> aumentarPosicionY(Dron dron) {
-        Try<Integer> posicionY = fueraDeRango(dron.getPosicion().getY());
-        if (posicionY.isFailure()) {
-            return Try.failure(new Exception());
-        }
-        Integer posicionY1 = posicionY.getOrElse(0);
-        Posicion posicion = new Posicion(dron.getPosicion().getX(), ++posicionY1, dron.getPosicion().getOrientacion());
-        return Try.of(() -> new Dron(posicion, dron.getPedidos()));
+        Try<Dron> drons = fueraDeRango(dron.getPosicion().getY())
+                .flatMap(posicionY -> Try.of(() -> {
+                    Integer posicion = posicionY;
+                    return new Posicion(dron.getPosicion().getX(), ++posicion, dron.getPosicion().getOrientacion());
+                }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
+        return drons;
     }
 
     public static Try<Dron> cambiarOrientacion(Dron dron, Movimiento movimiento) {
         Orientacion orientacion = DeterminarNuevaOrientacion(dron.getPosicion().getOrientacion(), movimiento);
+
         return Try.of(() ->
                 new Dron(
                         new Posicion(
@@ -126,6 +123,7 @@ public class ServicioPosicion {
 
     public static Try<Dron> avanzar(Dron dron) {
         Orientacion orientacion = dron.getPosicion().getOrientacion();
+
         switch (orientacion) {
             case Norte:
                 return aumentarPosicionY(dron);

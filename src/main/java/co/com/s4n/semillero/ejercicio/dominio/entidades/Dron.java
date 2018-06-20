@@ -5,14 +5,22 @@ import lombok.Getter;
 
 public class Dron {
 
-    @Getter
+    //@Getter
     private Posicion posicion;
 
-    @Getter
+    //@Getter
     private List<Pedido> pedidos;
 
     public Dron(Posicion posicion, List<Pedido> pedidos) {
         this.posicion = posicion;
         this.pedidos = pedidos;
+    }
+
+    public Posicion getPosicion() {
+        return posicion;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
     }
 }
