@@ -6,9 +6,13 @@ import co.com.s4n.semillero.ejercicio.dominio.entidades.Posicion;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Movimiento;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Orientacion;
 import io.vavr.collection.List;
+import io.vavr.concurrent.Future;
 import io.vavr.control.Try;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 public class ServicioPedido {
 
@@ -78,5 +82,57 @@ public class ServicioPedido {
             }
         });
         return Try.of(() -> drons[0]);
+    }
+
+    //No son simultaneos
+    public static Boolean organizarPedidoF(List<Try<Dron>> drones) {
+        int[] i = {1};
+        String src = "src/main/resources/out";
+        ExecutorService es = Executors.newFixedThreadPool(3);
+        Future<List<Try<Dron>>> future = Future.of(es, () -> drones);
+        /*
+        future.onComplete(lists -> lists.get()
+                .flatMap(s -> {
+                        System.out.println((i[0]++) + ">> " + Thread.currentThread().getName());
+                        return null;
+                }));*/
+        future
+                .forEach(dr -> dr
+                        .forEach(drons -> {
+                            System.out.println(i[0] + "> " + Thread.currentThread().getName());
+                            try {
+                                entregarPedidoF(drons.getOrElse(new Dron()), src + "0" + i[0]++);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }));
+        return true;
+    }
+
+    public static Boolean entregarPedidoF(Dron dron, String src) throws Exception{
+        Dron dron1 = dron;
+        List<Try<Dron>>  drones = List.empty();
+        java.util.List<Try<Dron>> list = new ArrayList();
+
+        while (!dron1.getPedidos().isEmpty()) {
+            realizarPedidoF(dron1).forEach(list::add);
+            List<Pedido> dropPedido = dron1.getPedidos().drop(10);
+            dron1 = new Dron(new Posicion(0, 0, Orientacion.Norte), dropPedido);
+        }
+
+        ServicioArchivo.escribirArchivo(list, src);
+
+        return true;
+    }
+
+    public static List<Try<Dron>> realizarPedidoF(Dron dron) {
+        Dron[] drons = {dron};
+        List<Try<Dron>> entregas = dron.getPedidos()
+                .take(10)
+                .map(pedido -> {
+                    drons[0] = realizarMovimiento(drons[0], pedido.getMovimientoList()).get();
+                    return Try.of(() -> drons[0]);
+                });
+        return entregas;
     }
 }

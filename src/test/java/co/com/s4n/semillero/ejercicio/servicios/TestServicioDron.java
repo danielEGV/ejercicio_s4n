@@ -100,4 +100,10 @@ public class TestServicioDron {
         assertEquals(0, drons.get().getPosicion().getX());
         assertEquals(0, drons.get().getPosicion().getY());
     }
+
+    @Test
+    public void testCrearListaDron() {
+        List<Try<Dron>> drones = ServicioDron.crearListaDron();
+        assertEquals(3, drones.size());
+    }
 }

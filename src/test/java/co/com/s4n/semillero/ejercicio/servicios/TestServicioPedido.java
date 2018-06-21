@@ -3,6 +3,7 @@ package co.com.s4n.semillero.ejercicio.servicios;
 import co.com.s4n.semillero.ejercicio.dominio.entidades.Dron;
 import co.com.s4n.semillero.ejercicio.dominio.servicios.ServicioDron;
 import co.com.s4n.semillero.ejercicio.dominio.servicios.ServicioPedido;
+import io.vavr.collection.List;
 import io.vavr.control.Try;
 import org.junit.Test;
 
@@ -54,5 +55,12 @@ public class TestServicioPedido {
         Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(dron.get(), "src/test/resources/out_4.txt"));
         System.out.println("Barrio" + servicio);
         assertTrue(servicio.isFailure());
+    }
+
+    @Test
+    public void testRealizarPedidoListaDron() {
+        List<Try<Dron>> drones = ServicioDron.crearListaDron();
+        Boolean servicio = ServicioPedido.organizarPedidoF(drones);
+        assertTrue(servicio);
     }
 }
