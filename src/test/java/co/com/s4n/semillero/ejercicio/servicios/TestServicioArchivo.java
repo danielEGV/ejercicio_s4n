@@ -105,4 +105,10 @@ public class TestServicioArchivo {
                         Movimiento.GDerecha),
                 pedidos.get(0).getMovimientoList());
     }
+
+    @Test
+    public void testLecturaArchivo_3() {
+        Try<List<Pedido>> pedido = Try.of(() -> ServicioArchivo.leerArchivo("src/test/resources/in_30.txt"));
+        assertTrue(pedido.isFailure());
+    }
 }

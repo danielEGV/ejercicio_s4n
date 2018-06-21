@@ -18,6 +18,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -99,5 +100,11 @@ public class TestServicioDron {
 
         assertEquals(0, drons.get().getPosicion().getX());
         assertEquals(0, drons.get().getPosicion().getY());
+    }
+
+    @Test
+    public void testCrearDronConArchivo_1() {
+        Try<Dron> drons = ServicioDron.crearDron("src/test/resources/in_30.txt");
+        assertTrue(drons.isFailure());
     }
 }
