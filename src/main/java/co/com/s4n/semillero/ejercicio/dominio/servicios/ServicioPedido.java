@@ -14,18 +14,24 @@ public class ServicioPedido {
 
     public static void entregarPedido (Dron dron) {
         Dron dron1 = dron;
-        int x = 0;
         List<List<Try<Dron>>> drons = List.empty();
         while (!dron1.getPedidos().isEmpty()) {
-            System.out.println(++x);
             drons = drons.append(entregarPedido1(dron1));
             List<Pedido> dropPedido = dron1.getPedidos().drop(3);
             dron1 = new Dron(new Posicion(0, 0, Orientacion.Norte), dropPedido);
-            //System.out.println(dropPedido.get(0).getMovimientoList());
         }
-
-        //Try.of(() -> ServicioArchivo.escribirArchivo(drons));
-
+        /*
+        List<Pedido> pedidos = dron.getPedidos();
+        Dron dron2 = dron;
+        List<Try<Dron>> drons = entregarPedido1(dron2, pedidos)
+                .map(drons1 -> {
+                    pedidos.drop(3);
+                    return drons1;
+                });
+        for (int i = 0; i < drons.size(); i++) {
+            System.out.println(drons.get(i).get().getPosicion().getX() + " - " + drons.get(i).get().getPosicion().getY());
+        }
+        */
         try {
             ServicioArchivo.escribirArchivo(drons);
         } catch (IOException e) {
@@ -42,13 +48,17 @@ public class ServicioPedido {
                     drons[0] = realizarMovimiento(drons[0], pedido.getMovimientoList()).get();
                     return Try.of(() -> drons[0]);
                 });
-        /*
-        try {
-            ServicioArchivo.escribirArchivo(entregas);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
+        return entregas;
+    }
+
+    public static List<Try<Dron>> entregarPedido1(Dron dron, List<Pedido> pedidos) {
+        Dron[] drons = {dron};
+        List<Try<Dron>> entregas = pedidos
+                .take(3)
+                .map(pedido -> {
+                    drons[0] = realizarMovimiento(drons[0], pedido.getMovimientoList()).get();
+                    return Try.of(() -> drons[0]);
+                });
         return entregas;
     }
 
