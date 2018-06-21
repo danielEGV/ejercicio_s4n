@@ -19,8 +19,8 @@ lazy val root = (project in file(".")).
       "org.projectlombok" % "lombok" % "1.16.16",
       "junit" % "junit" % "4.11" % "test",
       "org.mockito" % "mockito-core" % "1.8.5" % Test,
-      //"org.powermock" % "powermock-api-mockito2" % "1.7.3" % "test"
-      "org.powermock" % "powermock-module-junit4" % "1.7.4" % Test,
-      "org.powermock" % "powermock-api-mockito" % "1.7.4" % Test
+      "org.powermock" % "powermock-api-mockito2" % "1.7.3" % "test",
+      "org.powermock" % "powermock-module-junit4" % "1.7.4" % Test
+      //"org.powermock" % "powermock-api-mockito" % "1.7.4" % Test
     )
   )

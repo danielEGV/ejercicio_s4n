@@ -5,7 +5,6 @@ import co.com.s4n.semillero.ejercicio.dominio.entidades.Posicion;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Movimiento;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Orientacion;
 import io.vavr.control.Try;
-import javafx.geometry.Pos;
 
 public class ServicioPosicion {
 
@@ -14,39 +13,35 @@ public class ServicioPosicion {
     }
 
     public static Try<Dron> disminuirPosicionX(Dron dron) {
-        Try<Dron> drons = fueraDeRango(dron.getPosicion().getX())
+        return fueraDeRango(dron.getPosicion().getX())
                 .flatMap(posicionX -> Try.of(() -> {
                     Integer posicion = posicionX;
                     return new Posicion(--posicion, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
                 }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
-        return drons;
     }
 
     public static Try<Dron> disminuirPosicionY(Dron dron) {
-        Try<Dron> drons = fueraDeRango(dron.getPosicion().getY())
+        return fueraDeRango(dron.getPosicion().getY())
                 .flatMap(posicionY -> Try.of(() -> {
                     Integer posicion = posicionY;
                     return new Posicion(dron.getPosicion().getX(), --posicion, dron.getPosicion().getOrientacion());
                 }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
-        return drons;
     }
 
     public static Try<Dron> aumentarPosicionX(Dron dron) {
-        Try<Dron> drons = fueraDeRango(dron.getPosicion().getX())
+        return fueraDeRango(dron.getPosicion().getX())
                 .flatMap(posicionX -> Try.of(() -> {
                     Integer posicion = posicionX;
                     return new Posicion(++posicion, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
                 }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
-        return drons;
     }
 
     public static Try<Dron> aumentarPosicionY(Dron dron) {
-        Try<Dron> drons = fueraDeRango(dron.getPosicion().getY())
+        return fueraDeRango(dron.getPosicion().getY())
                 .flatMap(posicionY -> Try.of(() -> {
                     Integer posicion = posicionY;
                     return new Posicion(dron.getPosicion().getX(), ++posicion, dron.getPosicion().getOrientacion());
                 }).flatMap(posicion -> Try.of(() -> new Dron(posicion, dron.getPedidos()))));
-        return drons;
     }
 
     public static Try<Dron> cambiarOrientacion(Dron dron, Movimiento movimiento) {
@@ -59,6 +54,38 @@ public class ServicioPosicion {
                                 dron.getPosicion().getY(),
                                 orientacion),
                         dron.getPedidos()));
+    }
+
+    public static Try<Dron> avanzar(Dron dron) {
+        return Try.of(() -> dron.getPosicion().getOrientacion())
+                .flatMap(orientacion1 -> {
+                    switch (orientacion1) {
+                        case Norte:
+                            return aumentarPosicionY(dron);
+                        case Sur:
+                            return disminuirPosicionY(dron);
+                        case Occidente:
+                            return aumentarPosicionX(dron);
+                        case Oriente:
+                            return disminuirPosicionX(dron);
+                        default:
+                            return Try.of(() -> dron);
+                    }
+                });
+        /*
+        switch (orientacion) {
+            case Norte:
+                return aumentarPosicionY(dron);
+            case Sur:
+                return disminuirPosicionY(dron);
+            case Occidente:
+                return aumentarPosicionX(dron);
+            case Oriente:
+                return disminuirPosicionX(dron);
+                default:
+                    return Try.of(() -> dron);
+        }
+        */
     }
 
     private static Orientacion DeterminarNuevaOrientacion(Orientacion orientacion, Movimiento movimiento) {
@@ -118,23 +145,6 @@ public class ServicioPosicion {
                 return Orientacion.Oriente;
                 default:
                     return Orientacion.Norte;
-        }
-    }
-
-    public static Try<Dron> avanzar(Dron dron) {
-        Orientacion orientacion = dron.getPosicion().getOrientacion();
-
-        switch (orientacion) {
-            case Norte:
-                return aumentarPosicionY(dron);
-            case Sur:
-                return disminuirPosicionY(dron);
-            case Occidente:
-                return aumentarPosicionX(dron);
-            case Oriente:
-                return disminuirPosicionX(dron);
-                default:
-                    return Try.of(() -> dron);
         }
     }
 }

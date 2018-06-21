@@ -8,18 +8,23 @@ import co.com.s4n.semillero.ejercicio.dominio.vo.Orientacion;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class ServicioPedido {
 
-    public static void entregarPedido (Dron dron) {
+    public static Boolean entregarPedido (Dron dron) throws Exception{
         Dron dron1 = dron;
-        List<List<Try<Dron>>> drons = List.empty();
+        java.util.List<Try<Dron>> list = new ArrayList();
+
         while (!dron1.getPedidos().isEmpty()) {
-            drons = drons.append(entregarPedido1(dron1));
+            realizarPedido(dron1).forEach(list::add);
             List<Pedido> dropPedido = dron1.getPedidos().drop(3);
             dron1 = new Dron(new Posicion(0, 0, Orientacion.Norte), dropPedido);
         }
+
+        ServicioArchivo.escribirArchivo(list);
+
+        return true;
         /*
         List<Pedido> pedidos = dron.getPedidos();
         Dron dron2 = dron;
@@ -31,18 +36,14 @@ public class ServicioPedido {
         for (int i = 0; i < drons.size(); i++) {
             System.out.println(drons.get(i).get().getPosicion().getX() + " - " + drons.get(i).get().getPosicion().getY());
         }
+        ServicioArchivo.escribirArchivo(drons);
         */
-        try {
-            ServicioArchivo.escribirArchivo(drons);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
-    public static List<Try<Dron>> entregarPedido1(Dron dron) {
+    public static List<Try<Dron>> realizarPedido(Dron dron) {
         Dron[] drons = {dron};
-        List<Pedido> pedidos = dron.getPedidos();
-        List<Try<Dron>> entregas = pedidos
+        List<Try<Dron>> entregas = dron.getPedidos()
                 .take(3)
                 .map(pedido -> {
                     drons[0] = realizarMovimiento(drons[0], pedido.getMovimientoList()).get();

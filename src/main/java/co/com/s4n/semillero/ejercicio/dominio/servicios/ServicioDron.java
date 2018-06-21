@@ -18,4 +18,19 @@ public class ServicioDron {
         return Try.of(() ->
                 new Dron(new Posicion(0, 0, Orientacion.Norte), ServicioArchivo.leerArchivo()));
     }
+
+    public static Try<Dron> crearDron(String srcArchivo) {
+        Try<List<Pedido>> pedido = Try.of(() -> ServicioArchivo.leerArchivo(srcArchivo));
+
+        if (pedido.isFailure()) {
+            return Try.failure(new Exception());
+        }
+        return Try.of(() ->
+                new Dron(new Posicion(0, 0, Orientacion.Norte), pedido.getOrElse(List.of(new Pedido()))));
+    }
+
+    public static Try<Dron> crearDron(List<Pedido> pedidos) {
+        return Try.of(() ->
+                new Dron(new Posicion(0, 0, Orientacion.Norte), pedidos));
+    }
 }

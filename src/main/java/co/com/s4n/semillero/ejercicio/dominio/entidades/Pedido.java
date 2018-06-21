@@ -12,6 +12,10 @@ public class Pedido {
         this.movimientoList = movimientoList;
     }
 
+    public Pedido() {
+        movimientoList = List.empty();
+    }
+
     public List<Movimiento> getMovimientoList() {
         return movimientoList;
     }
