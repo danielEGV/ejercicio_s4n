@@ -24,6 +24,8 @@ public class ServicioPedido {
             //System.out.println(dropPedido.get(0).getMovimientoList());
         }
 
+        //Try.of(() -> ServicioArchivo.escribirArchivo(drons));
+
         try {
             ServicioArchivo.escribirArchivo(drons);
         } catch (IOException e) {

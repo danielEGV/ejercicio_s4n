@@ -1,6 +1,5 @@
 package co.com.s4n.semillero.ejercicio.dominio.servicios;
 
-
 import co.com.s4n.semillero.ejercicio.dominio.entidades.Dron;
 import co.com.s4n.semillero.ejercicio.dominio.entidades.Pedido;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Movimiento;
@@ -9,11 +8,18 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 
 import java.io.*;
+import java.util.Properties;
 
 public class ServicioArchivo {
 
+    public static Properties leerProperties() throws IOException {
+        Properties properties = new Properties();
+        properties.load(new FileReader("src/main/resources/archivo.properties"));
+        return properties;
+    }
+
     public static List<Pedido> leerArchivo() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("/home/s4n/Documents/semillero_s4n/daniel/s4n/ejercicio/src/main/resources/in.txt"));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(leerProperties().getProperty("rutaArchivoIn")));
         String line;
         List<Pedido> pedidos = List.empty();
         while ((line = bufferedReader.readLine()) != null) {
@@ -21,8 +27,6 @@ public class ServicioArchivo {
         }
         return pedidos;
     }
-
-
 
     public static List<Movimiento> determinarMovimiento(String line) {
         List<String> split = separarValores(line);
@@ -39,42 +43,28 @@ public class ServicioArchivo {
             }
         });
         return movimientos;
-
     }
 
     public static List<String> separarValores(String line) {
         List<String> split = List.empty();
-        for (int i = 0; i < line.length(); i++)
-        {
+        for (int i = 0; i < line.length(); i++) {
             split = split.append(line.substring(i, i + 1));
         }
         return split;
     }
 
     public static void escribirArchivo(List<List<Try<Dron>>> drones1) throws IOException {
-        FileWriter fichero = new FileWriter("/home/s4n/Documents/semillero_s4n/daniel/s4n/ejercicio/src/main/resources/out.txt");
+        FileWriter fichero = new FileWriter(leerProperties().getProperty("rutaArchivoOut"));
         PrintWriter pw = new PrintWriter(fichero);
-
-
 
         pw.println("== Reporte de entregas ==");
         drones1.forEach(drones -> drones.forEach(dron -> pw.println(
-                "(" + dron.get().getPosicion().getX() + ", " +
-                dron.get().getPosicion().getY() + ") " +
-                dron.get().getPosicion().getOrientacion())));
+                "(" + dron.getOrElse(new Dron()).getPosicion().getX() + ", " +
+                dron.getOrElse(new Dron()).getPosicion().getY() + ") " +
+                dron.getOrElse(new Dron()).getPosicion().getOrientacion())));
 
-
-                if (null != fichero) {
-                    fichero.close();
-                }
-
-
-        /*
-        System.out.println(
-                "(" + dron.get().getPosicion().getX() + ", " +
-                        dron.get().getPosicion().getY() + ") " +
-                        dron.get().getPosicion().getOrientacion()
-        );
-        */
+        if (null != fichero) {
+            fichero.close();
+        }
     }
 }

@@ -16,6 +16,10 @@ public class Dron {
         this.pedidos = pedidos;
     }
 
+    public Dron() {
+
+    }
+
     public Posicion getPosicion() {
         return posicion;
     }
