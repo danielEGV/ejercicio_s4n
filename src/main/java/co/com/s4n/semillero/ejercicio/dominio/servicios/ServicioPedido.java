@@ -41,20 +41,24 @@ public class ServicioPedido {
 
     }
 
+    public static Boolean entregarPedido (Dron dron, String src) throws Exception{
+        Dron dron1 = dron;
+        java.util.List<Try<Dron>> list = new ArrayList();
+
+        while (!dron1.getPedidos().isEmpty()) {
+            realizarPedido(dron1).forEach(list::add);
+            List<Pedido> dropPedido = dron1.getPedidos().drop(3);
+            dron1 = new Dron(new Posicion(0, 0, Orientacion.Norte), dropPedido);
+        }
+
+        ServicioArchivo.escribirArchivo(list, src);
+
+        return true;
+    }
+
     public static List<Try<Dron>> realizarPedido(Dron dron) {
         Dron[] drons = {dron};
         List<Try<Dron>> entregas = dron.getPedidos()
-                .take(3)
-                .map(pedido -> {
-                    drons[0] = realizarMovimiento(drons[0], pedido.getMovimientoList()).get();
-                    return Try.of(() -> drons[0]);
-                });
-        return entregas;
-    }
-
-    public static List<Try<Dron>> entregarPedido1(Dron dron, List<Pedido> pedidos) {
-        Dron[] drons = {dron};
-        List<Try<Dron>> entregas = pedidos
                 .take(3)
                 .map(pedido -> {
                     drons[0] = realizarMovimiento(drons[0], pedido.getMovimientoList()).get();

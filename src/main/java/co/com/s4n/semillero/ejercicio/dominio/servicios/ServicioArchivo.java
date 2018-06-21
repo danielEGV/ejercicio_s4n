@@ -79,7 +79,23 @@ public class ServicioArchivo {
         }
     }
 
+    public static void escribirArchivo(java.util.List<Try<Dron>> drones1, String src) throws IOException {
+        FileWriter fichero = new FileWriter(src);
+        PrintWriter pw = new PrintWriter(fichero);
 
+        pw.println("== Reporte de entregas ==");
+        drones1.stream().forEach(drons -> pw.println(
+                "(" + drons.getOrElse(new Dron()).getPosicion().getX()+ ", " +
+                        drons.getOrElse(new Dron()).getPosicion().getY() + ") " +
+                        drons.getOrElse(new Dron()).getPosicion().getOrientacion())
+        );
+
+        if (null != fichero) {
+            fichero.close();
+        }
+    }
+
+    /*
     public static void escribirArchivo(List<List<Try<Dron>>> drones1, String src) throws IOException {
         FileWriter fichero = new FileWriter(src);
         PrintWriter pw = new PrintWriter(fichero);
@@ -95,7 +111,7 @@ public class ServicioArchivo {
         }
     }
 
-    /*
+
     public static void escribirArchivo(List<List<Try<Dron>>> drones1) throws IOException {
         FileWriter fichero = new FileWriter(leerProperties().getProperty("rutaArchivoOut"));
         PrintWriter pw = new PrintWriter(fichero);

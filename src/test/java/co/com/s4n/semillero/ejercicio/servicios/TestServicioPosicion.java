@@ -59,7 +59,7 @@ public class TestServicioPosicion {
         Dron drons = ServicioDron.crearDron().get();
         Dron dron = new Dron(new Posicion(drons.getPosicion().getX(), drons.getPosicion().getY(), Orientacion.Occidente), drons.getPedidos());
         Try<Dron> avanzar = ServicioPosicion.avanzar(dron);
-        assertEquals(1, avanzar.get().getPosicion().getX());
+        assertEquals(-1, avanzar.get().getPosicion().getX());
         assertEquals(0, avanzar.get().getPosicion().getY());
         assertEquals(Orientacion.Occidente, avanzar.get().getPosicion().getOrientacion());
     }
@@ -79,7 +79,7 @@ public class TestServicioPosicion {
         Dron dron = new Dron(new Posicion(drons.getPosicion().getX(), drons.getPosicion().getY(), Orientacion.Oriente), drons.getPedidos());
         Try<Dron> avanzar = ServicioPosicion.avanzar(dron);
         assertEquals(0, avanzar.get().getPosicion().getY());
-        assertEquals(-1, avanzar.get().getPosicion().getX());
+        assertEquals(1, avanzar.get().getPosicion().getX());
         assertEquals(Orientacion.Oriente, avanzar.get().getPosicion().getOrientacion());
     }
 

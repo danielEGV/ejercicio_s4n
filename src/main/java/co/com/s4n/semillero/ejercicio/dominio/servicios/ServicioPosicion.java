@@ -8,12 +8,10 @@ import io.vavr.control.Try;
 
 public class ServicioPosicion {
 
-    public static Try<Integer> fueraDeRango(int valor) {
-        return (valor >= -10 && valor <= 10) ? Try.of(() -> valor) : Try.failure(new Exception());
-    }
+
 
     public static Try<Dron> disminuirPosicionX(Dron dron) {
-        return fueraDeRango(dron.getPosicion().getX())
+        return ServicioCuadras.fueraDeRango(dron.getPosicion().getX())
                 .flatMap(posicionX -> Try.of(() -> {
                     Integer posicion = posicionX;
                     return new Posicion(--posicion, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
@@ -21,7 +19,7 @@ public class ServicioPosicion {
     }
 
     public static Try<Dron> disminuirPosicionY(Dron dron) {
-        return fueraDeRango(dron.getPosicion().getY())
+        return ServicioCuadras.fueraDeRango(dron.getPosicion().getY())
                 .flatMap(posicionY -> Try.of(() -> {
                     Integer posicion = posicionY;
                     return new Posicion(dron.getPosicion().getX(), --posicion, dron.getPosicion().getOrientacion());
@@ -29,7 +27,7 @@ public class ServicioPosicion {
     }
 
     public static Try<Dron> aumentarPosicionX(Dron dron) {
-        return fueraDeRango(dron.getPosicion().getX())
+        return ServicioCuadras.fueraDeRango(dron.getPosicion().getX())
                 .flatMap(posicionX -> Try.of(() -> {
                     Integer posicion = posicionX;
                     return new Posicion(++posicion, dron.getPosicion().getY(), dron.getPosicion().getOrientacion());
@@ -37,7 +35,7 @@ public class ServicioPosicion {
     }
 
     public static Try<Dron> aumentarPosicionY(Dron dron) {
-        return fueraDeRango(dron.getPosicion().getY())
+        return ServicioCuadras.fueraDeRango(dron.getPosicion().getY())
                 .flatMap(posicionY -> Try.of(() -> {
                     Integer posicion = posicionY;
                     return new Posicion(dron.getPosicion().getX(), ++posicion, dron.getPosicion().getOrientacion());

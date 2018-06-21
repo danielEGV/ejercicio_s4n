@@ -15,8 +15,8 @@ public class TestServicioPedido {
     public void testEntregaPedido() {
         Try<Dron> dron = ServicioDron.crearDron();
         //Try<Dron> dron = ServicioDron.crearDron("src/test/resources/in_3.txt");
-        Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(dron.get()));
-
+        Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(dron.getOrElse(new Dron())));
+        assertTrue(servicio.get());
     }
 
 
@@ -26,6 +26,7 @@ public class TestServicioPedido {
         Try<Dron> dron = ServicioDron.crearDron("src/test/resources/in_3.txt");
         assertTrue(dron.isSuccess());
         Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(dron.get()));
+        assertTrue(servicio.isEmpty());
     }
 
 
@@ -33,5 +34,25 @@ public class TestServicioPedido {
     public void testEntregaPedido2() {
         Try<Dron> drons = ServicioDron.crearDron("src/test/resources/in_2.txt");
         Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(drons.get()));
+        assertTrue(servicio.get());
+    }
+
+
+    // Si se pasa de la cantidad de cuadras el servicio falla Norte
+    @Test
+    public void testEntregaPedidoFueraDelBarrioNo() {
+        Try<Dron> dron = ServicioDron.crearDron("src/test/resources/in_4.txt");
+        Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(dron.get(), "src/test/resources/out_4.txt"));
+        System.out.println("Barrio" + servicio);
+        assertTrue(servicio.isFailure());
+    }
+
+    // Si se pasa de la cantidad de cuadras el servicio falla occidente
+    @Test
+    public void testEntregaPedidoFueraDelBarrioOc() {
+        Try<Dron> dron = ServicioDron.crearDron("src/test/resources/in_5.txt");
+        Try<Boolean> servicio = Try.of(() -> ServicioPedido.entregarPedido(dron.get(), "src/test/resources/out_4.txt"));
+        System.out.println("Barrio" + servicio);
+        assertTrue(servicio.isFailure());
     }
 }

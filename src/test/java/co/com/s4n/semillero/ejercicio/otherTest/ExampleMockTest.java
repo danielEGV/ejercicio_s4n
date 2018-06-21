@@ -1,5 +1,5 @@
 package co.com.s4n.semillero.ejercicio.otherTest;
-/*
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -20,10 +20,12 @@ class ClassWithStatics {
     }
 }
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ClassWithStatics.class})
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest(fullyQualifiedNames = "co.com.s4n.semillero.ejercicio.otherTest.ClassWithStatics")
 public class ExampleMockTest {
-    @Test
+
+    //@PrepareForTest(ClassWithStatics.class)
+  /*  @Test
     public void test() {
         PowerMockito.mockStatic(ClassWithStatics.class);
 
@@ -31,5 +33,5 @@ public class ExampleMockTest {
 
         assertEquals("Hello", ClassWithStatics.getString());
     }
-
-}*/
+*/
+}
