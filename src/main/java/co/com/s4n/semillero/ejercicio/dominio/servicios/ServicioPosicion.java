@@ -62,9 +62,9 @@ public class ServicioPosicion {
                             return aumentarPosicionY(dron);
                         case Sur:
                             return disminuirPosicionY(dron);
-                        case Occidente:
-                            return aumentarPosicionX(dron);
                         case Oriente:
+                            return aumentarPosicionX(dron);
+                        case Occidente:
                             return disminuirPosicionX(dron);
                         default:
                             return Try.of(() -> dron);
