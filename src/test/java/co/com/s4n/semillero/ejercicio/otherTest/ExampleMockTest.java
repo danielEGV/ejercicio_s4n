@@ -25,13 +25,13 @@ class ClassWithStatics {
 public class ExampleMockTest {
 
     //@PrepareForTest(ClassWithStatics.class)
-  /*  @Test
+  /*@Test
     public void test() {
         PowerMockito.mockStatic(ClassWithStatics.class);
 
         when(ClassWithStatics.getString()).thenReturn("Hello");
 
         assertEquals("Hello", ClassWithStatics.getString());
-    }
-*/
+    }*/
+
 }
