@@ -17,6 +17,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -104,5 +105,19 @@ public class TestServicioArchivo {
                         Movimiento.Adelante,
                         Movimiento.GDerecha),
                 pedidos.get(0).getMovimientoList());
+    }
+
+
+    @Test
+    public void testPropiedades() {
+         Properties properties = null;
+        try {
+            properties = ServicioArchivo.leerProperties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertEquals(2, properties.size());
+
+
     }
 }

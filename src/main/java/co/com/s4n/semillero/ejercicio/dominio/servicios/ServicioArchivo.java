@@ -95,6 +95,24 @@ public class ServicioArchivo {
         }
     }
 
+    public static List<Pedido> leerArchivos() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(
+                new FileReader(leerProperties().getProperty("rutaArchivoIn")));
+        String line;
+        List<Pedido> pedidos = List.empty();
+        while ((line = bufferedReader.readLine()) != null) {
+            pedidos = pedidos.append(new Pedido(determinarMovimiento(line)));
+        }
+        return pedidos;
+    }
+
+
+    public static Properties leerPropertiesLecturaF() throws IOException {
+        Properties properties = new Properties();
+        properties.load(new FileReader("src/main/resources/archivoF.properties"));
+        return properties;
+    }
+
     /*
     public static void escribirArchivo(List<List<Try<Dron>>> drones1, String src) throws IOException {
         FileWriter fichero = new FileWriter(src);
