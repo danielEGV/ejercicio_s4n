@@ -85,18 +85,29 @@ public class ServicioPedido {
     }
 
     //No son simultaneos
-    public static Boolean organizarPedidoF(List<Try<Dron>> drones) {
+    public static Boolean organizarPedidoF(List<Future<Try<Dron>>> drones) {
         int[] i = {1};
         String src = "src/main/resources/out";
-        ExecutorService es = Executors.newFixedThreadPool(3);
-        Future<List<Try<Dron>>> future = Future.of(es, () -> drones);
+
+
+        drones
+                .forEach(dron -> dron
+                        .onComplete(dron1 -> {
+                            System.out.println(Thread.currentThread().getName());
+                            try {
+                                entregarPedidoF(dron1.get().getOrElse(new Dron()), src + "0" + i[0]++);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }));
+        //Future<List<Try<Dron>>> future = Future.of(es, () -> drones);
         /*
         future.onComplete(lists -> lists.get()
                 .flatMap(s -> {
                         System.out.println((i[0]++) + ">> " + Thread.currentThread().getName());
                         return null;
                 }));*/
-        future
+        /*future
                 .forEach(dr -> dr
                         .forEach(drons -> {
                             System.out.println(i[0] + "> " + Thread.currentThread().getName());
@@ -105,7 +116,7 @@ public class ServicioPedido {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                        }));
+                        }));*/
         return true;
     }
 

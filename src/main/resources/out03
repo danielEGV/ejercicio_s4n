@@ -1,5 +1,12 @@
 == Reporte de entregas ==
-(3, 0) Norte
-(1, 2) Oriente
-(-2, 2) Sur
-(-6, 0) Occidente
+(2, 2) Norte
+(2, -1) Sur
+(2, 1) Norte
+(2, 4) Norte
+(1, 6) Norte
+(3, 8) Oriente
+(3, 4) Sur
+(1, 2) Occidente
+(2, 1) Oriente
+(0, 1) Occidente
+(3, 4) Oriente

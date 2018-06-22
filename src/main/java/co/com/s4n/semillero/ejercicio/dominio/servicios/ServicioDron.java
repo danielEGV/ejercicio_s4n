@@ -8,6 +8,9 @@ import io.vavr.collection.List;
 import io.vavr.concurrent.Future;
 import io.vavr.control.Try;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ServicioDron {
 
     public static Try<Dron> crearDron() {
@@ -45,12 +48,13 @@ public class ServicioDron {
                 new Dron(new Posicion(0, 0, Orientacion.Norte), pedido.getOrElse(List.of(new Pedido()))));
     }
 
-    public static List<Try<Dron>> crearListaDron() {
+    public static List<Future<Try<Dron>>> crearListaDron() {
         String src = "src/main/resources/in";
+        ExecutorService es = Executors.newFixedThreadPool(3);
         return List.of(
-                crearDronF(src + "01.txt"),
-                crearDronF(src + "02.txt"),
-                crearDronF(src + "03.txt")
+                Future.of(es, () -> crearDronF(src + "01.txt")),
+                Future.of(es, () -> crearDronF(src + "02.txt")),
+                Future.of(es, () -> crearDronF(src + "03.txt"))
         );
     }
 

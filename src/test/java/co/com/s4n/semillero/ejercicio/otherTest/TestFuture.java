@@ -16,8 +16,27 @@ public class TestFuture {
 
         ExecutorService es = Executors.newFixedThreadPool(3);
         Future<List<Integer>> of = Future.of(es, () -> integers);
-        of
+        /*of
                 .onComplete(v -> v.
-                        forEach( k -> System.out.println(Thread.currentThread().getName())));
+                        forEach(integers1 -> integers1
+                                .forEach(integer ->  System.out.println(Thread.currentThread().getName()))));
+        */
+    }
+
+
+    @Test
+    public void test2() {
+        List<Future<Integer>> integers = List.of(
+                Future.of(() -> 1),
+                Future.of(() -> 2),
+                Future.of(() -> 3),
+                Future.of(() -> 4));
+
+        ExecutorService es = Executors.newFixedThreadPool(3);
+
+        integers
+                .forEach(integers1 ->
+                        integers1.onComplete(integers2 ->
+                                 System.out.println(Thread.currentThread().getName())));
     }
 }

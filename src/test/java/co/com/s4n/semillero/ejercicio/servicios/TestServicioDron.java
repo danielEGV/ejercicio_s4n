@@ -8,6 +8,7 @@ import co.com.s4n.semillero.ejercicio.dominio.servicios.ServicioDron;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Movimiento;
 import co.com.s4n.semillero.ejercicio.dominio.vo.Orientacion;
 import io.vavr.collection.List;
+import io.vavr.concurrent.Future;
 import io.vavr.control.Try;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -103,7 +104,7 @@ public class TestServicioDron {
 
     @Test
     public void testCrearListaDron() {
-        List<Try<Dron>> drones = ServicioDron.crearListaDron();
+        List<Future<Try<Dron>>> drones = ServicioDron.crearListaDron();
         assertEquals(3, drones.size());
     }
 }
