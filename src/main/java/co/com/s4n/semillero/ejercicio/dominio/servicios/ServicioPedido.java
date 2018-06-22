@@ -84,8 +84,8 @@ public class ServicioPedido {
         return Try.of(() -> drons[0]);
     }
 
-    //No son simultaneos
-    public static Boolean organizarPedidoF(List<Future<Try<Dron>>> drones) {
+
+    public static Boolean organizarPedidoF(List<Future<Dron>> drones) {
         int[] i = {1};
         String src = "src/main/resources/out";
 
@@ -95,7 +95,7 @@ public class ServicioPedido {
                         .onComplete(dron1 -> {
                             System.out.println(Thread.currentThread().getName());
                             try {
-                                entregarPedidoF(dron1.get().getOrElse(new Dron()), src + "0" + i[0]++);
+                                entregarPedidoF(dron1.getOrElse(new Dron()), src + "0" + i[0]++);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

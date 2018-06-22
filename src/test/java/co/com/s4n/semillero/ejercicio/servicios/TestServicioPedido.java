@@ -8,6 +8,8 @@ import io.vavr.concurrent.Future;
 import io.vavr.control.Try;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -60,7 +62,12 @@ public class TestServicioPedido {
 
     @Test
     public void testRealizarPedidoListaDron() {
-        List<Future<Try<Dron>>> drones = ServicioDron.crearListaDron();
+        List<Future<Dron>> drones = null;
+        try {
+            drones = ServicioDron.crearListaDron();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Boolean servicio = ServicioPedido.organizarPedidoF(drones);
         assertTrue(servicio);
     }

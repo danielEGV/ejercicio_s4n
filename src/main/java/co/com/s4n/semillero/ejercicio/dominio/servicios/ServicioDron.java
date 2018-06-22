@@ -8,6 +8,7 @@ import io.vavr.collection.List;
 import io.vavr.concurrent.Future;
 import io.vavr.control.Try;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,24 +39,29 @@ public class ServicioDron {
                 new Dron(new Posicion(0, 0, Orientacion.Norte), pedidos));
     }
 
-    public static Try<Dron> crearDronF(String srcArchivo) {
+    public static Dron crearDronF(String srcArchivo) {
         Try<List<Pedido>> pedido = Try.of(() -> ServicioArchivo.leerArchivo(srcArchivo));
 
         if (pedido.isFailure()) {
-            return Try.failure(new Exception());
+            return new Dron();
         }
-        return Try.of(() ->
-                new Dron(new Posicion(0, 0, Orientacion.Norte), pedido.getOrElse(List.of(new Pedido()))));
+
+        System.out.println(">> Pedido: " + pedido);
+        return new Dron(new Posicion(0, 0, Orientacion.Norte), pedido.getOrElse(List.of(new Pedido())));
     }
 
-    public static List<Future<Try<Dron>>> crearListaDron() {
+    public static List<Future<Dron>> crearListaDron() throws IOException {
         String src = "src/main/resources/in";
         ExecutorService es = Executors.newFixedThreadPool(3);
-        return List.of(
-                Future.of(es, () -> crearDronF(src + "01.txt")),
-                Future.of(es, () -> crearDronF(src + "02.txt")),
-                Future.of(es, () -> crearDronF(src + "03.txt"))
-        );
+        List<Future<Dron>> futureDron = List.empty();
+        System.out.println(ServicioArchivo.leerPropertiesLecturaF().size());
+        for (int i = 1; i <= ServicioArchivo.leerPropertiesLecturaF().size(); i++) {
+            final int x = i;
+            System.out.println(src + "0" + i + ".txt");
+            futureDron.append(Future.of(es,() -> crearDronF(src + "0" + x +".txt")));
+        }
+
+        return futureDron;
     }
 
 }

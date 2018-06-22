@@ -104,7 +104,12 @@ public class TestServicioDron {
 
     @Test
     public void testCrearListaDron() {
-        List<Future<Try<Dron>>> drones = ServicioDron.crearListaDron();
+        List<Future<Dron>> drones = null;
+        try {
+            drones = ServicioDron.crearListaDron();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         assertEquals(3, drones.size());
     }
 }
