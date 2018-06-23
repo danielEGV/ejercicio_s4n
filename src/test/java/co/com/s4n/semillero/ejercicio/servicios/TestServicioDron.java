@@ -110,6 +110,8 @@ public class TestServicioDron {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals(3, drones.size());
+
+        System.out.println(drones.get(0).get().getPedidos().get(0).getMovimientoList().get(0));
+        assertEquals(3, drones.length());
     }
 }

@@ -26,8 +26,8 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(fullyQualifiedNames = "co.com.s4n.semillero.ejercicio.dominio.servicios.ServicioArchivo")
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest(fullyQualifiedNames = "co.com.s4n.semillero.ejercicio.dominio.servicios.ServicioArchivo")
 public class TestServicioArchivo {
 
      @Test
@@ -41,7 +41,7 @@ public class TestServicioArchivo {
         Pedido pedido3 = new Pedido(entrega3);
         Pedido pedido4 = new Pedido(entrega4);
 
-        mockStatic(ServicioArchivo.class);
+        //mockStatic(ServicioArchivo.class);
 
          try {
             //when(ServicioArchivo.leerArchivo()).thenReturn(List.of(pedido1, pedido2, pedido3));

@@ -39,28 +39,28 @@ public class ServicioDron {
                 new Dron(new Posicion(0, 0, Orientacion.Norte), pedidos));
     }
 
-    public static Dron crearDronF(String srcArchivo) {
+    public static Dron crearDronF(int x, String srcArchivo) {
         Try<List<Pedido>> pedido = Try.of(() -> ServicioArchivo.leerArchivo(srcArchivo));
 
         if (pedido.isFailure()) {
             return new Dron();
         }
 
-        System.out.println(">> Pedido: " + pedido);
-        return new Dron(new Posicion(0, 0, Orientacion.Norte), pedido.getOrElse(List.of(new Pedido())));
+        return new Dron(x, new Posicion(0, 0, Orientacion.Norte), pedido.getOrElse(List.of(new Pedido())));
     }
 
     public static List<Future<Dron>> crearListaDron() throws IOException {
         String src = "src/main/resources/in";
         ExecutorService es = Executors.newFixedThreadPool(3);
         List<Future<Dron>> futureDron = List.empty();
-        System.out.println(ServicioArchivo.leerPropertiesLecturaF().size());
         for (int i = 1; i <= ServicioArchivo.leerPropertiesLecturaF().size(); i++) {
             final int x = i;
-            System.out.println(src + "0" + i + ".txt");
-            futureDron.append(Future.of(es,() -> crearDronF(src + "0" + x +".txt")));
+            if (i <= 9) {
+                futureDron = futureDron.append(Future.of(es, () -> crearDronF(x, src + "0" + x + ".txt")));
+            } else {
+                futureDron = futureDron.append(Future.of(es, () -> crearDronF(x, src + x + ".txt")));
+            }
         }
-
         return futureDron;
     }
 

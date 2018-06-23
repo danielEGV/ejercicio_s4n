@@ -86,16 +86,17 @@ public class ServicioPedido {
 
 
     public static Boolean organizarPedidoF(List<Future<Dron>> drones) {
-        int[] i = {1};
         String src = "src/main/resources/out";
-
-
         drones
                 .forEach(dron -> dron
                         .onComplete(dron1 -> {
                             System.out.println(Thread.currentThread().getName());
                             try {
-                                entregarPedidoF(dron1.getOrElse(new Dron()), src + "0" + i[0]++);
+                                if (dron1.getOrElse(new Dron()).getId() <= 9) {
+                                    entregarPedidoF(dron1.getOrElse(new Dron()), src + "0" + dron1.getOrElse(new Dron()).getId());
+                                } else {
+                                    entregarPedidoF(dron1.getOrElse(new Dron()), src + dron1.getOrElse(new Dron()).getId());
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -128,7 +129,7 @@ public class ServicioPedido {
         while (!dron1.getPedidos().isEmpty()) {
             realizarPedidoF(dron1).forEach(list::add);
             List<Pedido> dropPedido = dron1.getPedidos().drop(10);
-            dron1 = new Dron(new Posicion(0, 0, Orientacion.Norte), dropPedido);
+            dron1 = new Dron(dron1.getId(), new Posicion(0, 0, Orientacion.Norte), dropPedido);
         }
 
         ServicioArchivo.escribirArchivo(list, src);
